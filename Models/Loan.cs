@@ -1,6 +1,10 @@
-﻿using System;
+﻿using BookLibrary.helpers;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using static BookLibrary.Models.Book;
 
@@ -8,17 +12,32 @@ namespace BookLibrary.Models
 {
     public class Loan
     {
+        // loan class that represents book model in the database
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [JsonConverter(typeof(StringToIntConverter))]
         public int ID { get; set; }
 
-        public User Loanee { get; set; }
+        [Required]
+        [JsonConverter(typeof(StringToIntConverter))]
+        public int UserId { get; set; }
 
-        public Book BorrowedBook { get; set; }
+        
+        public User User { get; set; }
+        [Required]
+        [JsonConverter(typeof(StringToIntConverter))]
+        public int BookId { get; set; }
 
+        public Book Book { get; set; }
+
+        [Required]
         public DateTime DateTaken { get; set; }
 
+        [Required]
+        [JsonConverter(typeof(StringToIntConverter))]
         public int DurationPeriod { get; set; }
+        
 
-        public bool IsReturned { get; set; }
 
         public DateTime? ActualReturnDate { get; set; }
 
@@ -30,35 +49,6 @@ namespace BookLibrary.Models
             }
         }
 
-        //constructor for Loan Class
-        public Loan(User user, Book book)
-        {
-            Loanee = user;
-            BorrowedBook = book;
-            book.Status = BookStatus.InLoan;
-            DateTaken = DateTime.Now;
-            DurationPeriod = 30;  // days 
-            IsReturned = false;
-            Loanee.BooksCurrentlyOnLoan.Add(BorrowedBook);
-        }
-
-        public Loan(User user, Book book, int duration)
-        {
-            Loanee = user;
-            BorrowedBook = book;
-            book.Status = BookStatus.InLoan;
-            DateTaken = DateTime.Now;
-            DurationPeriod = duration;
-            IsReturned = false;
-            Loanee.BooksCurrentlyOnLoan.Add(BorrowedBook);
-        }
-
-        public void ReturnLoan()
-        {
-            IsReturned = true;
-            BorrowedBook.Status = BookStatus.Available;
-            ActualReturnDate = DateTime.Now;
-            Loanee.BooksCurrentlyOnLoan.Remove(BorrowedBook);
-        }
+        
     }
 }

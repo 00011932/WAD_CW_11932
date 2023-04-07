@@ -1,0 +1,49 @@
+﻿<div class="row">
+    <h2>Create User</h2>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="customerName" class="control-label"></label>
+            <input ng-model="user.FirstName" placeholder="First Name" required />
+        </div>
+        <div class="form-group">
+            <label for="customerName" class="control-label"></label>
+            <input ng-model="user.LastName" placeholder="Last Name" required />
+        </div>
+        <div class="form-group">
+            <label for="customerName" class="control-label"></label>
+            <input ng-model="user.Email" placeholder="Email" required />
+        </div>
+        <div class="form-group">
+            <label for="customerName" class="control-label"></label>
+            <input ng-model="user.PassportNumber" type="text" placeholder="Passport Number: str" required />
+
+        </div>
+
+        <div class="form-group">
+            <label for="customerName" class="control-label"></label>
+            <input ng-model="user.CreatedAt" disabled />
+        </div>
+
+        <div class="form-group">
+            <label for="customerName" class="control-label"></label>
+            <input ng-model="user.Status" type="text" placeholder="Status: int" required />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-block btn-success" ng-disabled="!(user.FirstName && user.LastName && user.Email && user.PassportNumber && user.Status)" ng-click="CreateUser()" />
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .control-label {
+        display: none;
+    }
+
+    input[type=submit] {
+        margin-top: 10px;
+    }
+</style>

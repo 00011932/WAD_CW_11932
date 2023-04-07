@@ -1,0 +1,38 @@
+﻿<div class="row">
+    <div class="col-md-4">
+        <h2>Create Book</h2>
+        <div class="form-group">
+            <label for="customerName" class="control-label"></label>
+            <input ng-model="book.Title" placeholder="Title" required />
+        </div>
+        <div class="form-group">
+            <label for="customerName" class="control-label"></label>
+            <input ng-model="book.ISBN" placeholder="ISBN" required />
+        </div>
+        <div class="form-group">
+            <label for="customerName" class="control-label"></label>
+            <input ng-model="book.Description" placeholder="Description" required />
+        </div>
+        <div class="form-group">
+            <label for="customerName" class="control-label"></label>
+            <input ng-model="book.Status" type="text" placeholder="Status: int" required />
+
+        </div>
+
+        <div class="form-group">
+            <label for="customerName" class="control-label"></label>
+            <input ng-model="book.Authors" type="text" placeholder="Authors" required />
+        </div>
+
+        <div class="form-group">
+            <label for="customerName" class="control-label"></label>
+            <input ng-model="book.PageCount" type="text" placeholder="PageCount" required />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-block btn-success" ng-disabled="!(book.Title && book.ISBN && book.Description && book.Status && book.Authors && book.PageCount)" ng-click="CreateBook()" />
+        </div>
+        <div class="form-group">
+            <a href="#!/books">Go back</a>
+        </div>
+    </div>
+</div>

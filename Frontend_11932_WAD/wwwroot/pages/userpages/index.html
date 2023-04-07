@@ -1,0 +1,40 @@
+﻿
+<div class="container">
+    <div class="row">
+        <div class="col-md-10">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Passport Number</th>
+                        <th>CreatedAt</th>
+                        
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="o in users">
+                        <td>{{o.id}}</td>
+                        <td>{{o.firstName}}</td>
+                        <td>{{o.lastName}}</td>
+                        <td>{{o.email}}</td>
+                        <td>{{o.passportNumber}}</td>
+                        <td>{{o.createdAt}}</td>
+                        <td>{{o.status}}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="#!/user/details/{{o.id}}">View</a>
+                            <a class="btn btn-warning btn-sm" href="#!/user/edit/{{o.id}}">Edit</a>
+                            <a class="btn btn-danger btn-sm" href="#!/user/delete/{{o.id}}">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="form-group">
+                <a class="btn btn-success" href="#!/user/create">Create New</a>
+            </div>
+        </div>
+    </div>
+</div>

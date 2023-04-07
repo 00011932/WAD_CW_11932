@@ -1,0 +1,344 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div ng-app="frontSPA">
+    <div ng-view></div>
+</div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
+<script type="text/javascript">
+    // Creating a Module to use within index page
+    var baseURL = 'http://localhost:31967/api/'
+    angular
+        .module('frontSPA', ['ngRoute'])
+        .config(function ($routeProvider) {
+            $routeProvider
+                .when('/',
+                    {
+                        templateUrl: 'pages/loanpages/index.html',
+                        controller: 'IndexController'
+                    })
+                .when('/create',
+                    {
+                        templateUrl: 'pages/loanpages/create.html',
+                        controller: 'CreateController'
+                    })
+                .when('/details/:loanId',
+                    {
+                        templateUrl: 'pages/loanpages/details.html',
+                        controller: 'DetailsController'
+                    })
+
+                .when('/edit/:loanId',
+                    {
+                        templateUrl: 'pages/loanpages/edit.html',
+                        controller: 'EditDeleteController'
+                    })
+                .when('/delete/:loanId',
+                    {
+                        templateUrl: 'pages/loanpages/delete.html',
+                        controller: 'EditDeleteController'
+                    })
+
+                // ==================================================================================================================//
+                // Book actions starts from here
+
+                .when('/book',
+                    {
+                        templateUrl: 'pages/bookpages/index.html',
+                        controller: 'BookIndexController'
+                    })
+                .when('/book/create',
+                    {
+                        templateUrl: 'pages/bookpages/create.html',
+                        controller: 'BookCreateController'
+                    })
+                .when('/book/details/:bookId',
+                    {
+                        templateUrl: 'pages/bookpages/details.html',
+                        controller: 'BookDetailsController'
+                    })
+
+                .when('/book/edit/:bookId',
+                    {
+                        templateUrl: 'pages/bookpages/edit.html',
+                        controller: 'BookEditDeleteController'
+                    })
+                .when('/book/delete/:bookId',
+                    {
+                        templateUrl: 'pages/bookpages/delete.html',
+                        controller: 'BookEditDeleteController'
+                    })
+                .otherwise({
+                    redirectTo: '/book'
+                })
+
+                // ==================================================================================================================//
+                // User actions starts from here
+
+                .when('/user',
+                    {
+                        templateUrl: 'pages/userpages/index.html',
+                        controller: 'UserIndexController'
+                    })
+                .when('/user/create',
+                    {
+                        templateUrl: 'pages/userpages/create.html',
+                        controller: 'UserCreateController'
+                    })
+                .when('/user/details/:userId',
+                    {
+                        templateUrl: 'pages/userpages/details.html',
+                        controller: 'UserDetailsController'
+                    })
+
+                .when('/user/edit/:userId',
+                    {
+                        templateUrl: 'pages/userpages/edit.html',
+                        controller: 'UserEditDeleteController'
+                    })
+                .when('/user/delete/:userId',
+                    {
+                        templateUrl: 'pages/userpages/delete.html',
+                        controller: 'UserEditDeleteController'
+                    })
+                .otherwise({
+                    redirectTo: '/user'
+                });
+
+        })
+        // ==================================================================================================================//
+                // Loan Controllers starts from here
+
+        .controller('IndexController', ['$scope', '$http', function ($scope, $http) {
+            $scope.loans = [];
+
+            $http.get('http://localhost:31967/api/loan/')
+                .then(function (res) {
+                    console.log(res.data)
+                    $scope.loans = res.data;
+                })
+        }])
+        .controller('CreateController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+            $scope.loan = {
+                ID: 0,
+                UserId: '',
+                BookId: '',
+                DateTaken: '2023-03-25T10:34:09',
+                DurationPeriod: '',
+            };
+
+            $scope.CreateLoan = function () {
+                //validate id, userid, and bookid as integers
+
+                // convert id, userid, and bookid to integers
+
+
+
+
+                // Submit the loan data if validation passes
+                $http.post('http://localhost:31967/api/loan/', $scope.loan, {
+                    headers: { 'Content-Type': 'application/json' },
+                    transformRequest: function (data) {
+                        // convert id, userid, and bookid to integers
+                        data.ID = parseInt(data.ID);
+                        data.UserId = parseInt(data.UserId);
+                        data.BookId = parseInt(data.BookId);
+                        data.DurationPeriod = parseInt(data.DurationPeriod);
+                        return JSON.stringify(data);
+                    }
+                }).then(function (res) {
+                    $location.path('/');
+                });
+            }
+        }])
+        .controller('DetailsController', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
+            $scope.details = [];
+
+            $http.get('http://localhost:31967/api/loan/' + $routeParams.loanId)
+                .then(function (res) {
+                    $scope.details = res.data;
+                });
+
+        }])
+        .controller('EditDeleteController', ['$scope', '$http', '$location', '$routeParams', function ($scope, $http, $location, $routeParams) {
+            $scope.edit = [];
+
+            $http.get('http://localhost:31967/api/loan/' + $routeParams.loanId)
+                .then(function (res) {
+                    $scope.edit = res.data;
+                });
+
+            $scope.Edit = function () {
+                $http.put('http://localhost:31967/api/loan/' + $routeParams.loanId, $scope.edit)
+                    .then(function (res) {
+                        $location.path('/');
+                    });
+            };
+            $scope.Delete = function () {
+                $http.delete('http://localhost:31967/api/loan/' + $routeParams.loanId, $scope.delete)
+                    .then(function (res) {
+                        $location.path('/');
+                    });
+            };
+
+        }])
+
+    // ==================================================================================================================//
+    // Book Controllers starts from here 
+
+      .controller('BookIndexController', ['$scope', '$http', function ($scope, $http) {
+        $scope.books = [];
+
+        $http.get('http://localhost:31967/api/book/')
+            .then(function (res) {
+                console.log(res.data)
+                $scope.books = res.data;
+            })
+    }])
+        .controller('BookCreateController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+            $scope.book = {
+                ID: 0,
+                Title: '',
+                ISBN: '',
+                Description: '',
+                Status: '',
+                Authors: '',
+                PageCount: '',
+            };
+
+            $scope.CreateBook = function () {
+ 
+                // Submit the book data if validation passes
+                $http.post('http://localhost:31967/api/book/', $scope.book, {
+                    headers: { 'Content-Type': 'application/json' },
+                    transformRequest: function (data) {
+                        
+                        data.ID = parseInt(data.ID);
+                        data.Status = parseInt(data.Status);
+                        data.PageCount = parseInt(data.PageCount);
+                      
+                        return JSON.stringify(data);
+                    }
+                }).then(function (res) {
+                    $location.path('/book');
+                });
+            }
+        }])
+        .controller('BookDetailsController', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
+            $scope.bookdetails = [];
+
+            $http.get('http://localhost:31967/api/book/' + $routeParams.bookId)
+                .then(function (res) {
+                    console.log(res.data)
+                    $scope.bookdetails = res.data;
+                });
+
+        }])
+        .controller('BookEditDeleteController', ['$scope', '$http', '$location', '$routeParams', function ($scope, $http, $location, $routeParams) {
+            $scope.bookedit = [];
+
+            $http.get('http://localhost:31967/api/book/' + $routeParams.bookId)
+                .then(function (res) {
+                    console.log(res.data)
+                    $scope.bookedit = res.data;
+                });
+
+            $scope.BookEdit = function () {
+                $http.put('http://localhost:31967/api/book/' + $routeParams.bookId, $scope.bookedit)
+
+                    .then(function (res) {
+                        console.log(res.data)
+                        $location.path('/book');
+                    });
+            };
+            $scope.BookDelete = function () {
+                $http.delete('http://localhost:31967/api/book/' + $routeParams.bookId, $scope.delete)
+                    .then(function (res) {
+                        $location.path('/book');
+                    });
+            };
+
+        }])
+
+        // ==================================================================================================================//
+        // User Controllers starts from here 
+
+        .controller('UserIndexController', ['$scope', '$http', function ($scope, $http) {
+            $scope.users = [];
+
+            $http.get('http://localhost:31967/api/user/')
+                .then(function (res) {
+                    console.log(res.data)
+                    $scope.users = res.data;
+                })
+        }])
+        .controller('UserCreateController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+            $scope.user = {
+                ID: 0,
+                FirstName: '',
+                LastName: '',
+                Email: '',
+                PassportNumber: '',
+                CreatedAt: new Date().toISOString(),
+                Status: '',
+            };
+
+            $scope.CreateUser = function () {
+
+                // Submit the book data if validation passes
+                $http.post('http://localhost:31967/api/user/', $scope.user, {
+                    headers: { 'Content-Type': 'application/json' },
+                    transformRequest: function (data) {
+
+                        data.ID = parseInt(data.ID);
+                        data.Status = parseInt(data.Status);
+                        
+
+                        return JSON.stringify(data);
+                    }
+                }).then(function (res) {
+                    $location.path('/user');
+                });
+            }
+        }])
+        .controller('UserDetailsController', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
+            $scope.userdetails = [];
+
+            $http.get('http://localhost:31967/api/user/' + $routeParams.userId)
+                .then(function (res) {
+                    console.log(res.data)
+                    $scope.userdetails = res.data;
+                });
+
+        }])
+        .controller('UserEditDeleteController', ['$scope', '$http', '$location', '$routeParams', function ($scope, $http, $location, $routeParams) {
+            $scope.useredit = [];
+
+            $http.get('http://localhost:31967/api/user/' + $routeParams.userId)
+                .then(function (res) {
+                    console.log(res.data)
+                    
+                    $scope.useredit = res.data;
+                });
+
+            $scope.UserEdit = function () {
+                $http.put('http://localhost:31967/api/user/' + $routeParams.userId, $scope.useredit)
+
+                    .then(function (res) {
+                        console.log(res.data)
+                        $location.path('/user');
+                    });
+            };
+            $scope.UserDelete = function () {
+                $http.delete('http://localhost:31967/api/user/' + $routeParams.userId, $scope.delete)
+                    .then(function (res) {
+                        $location.path('/user');
+                    });
+            };
+
+        }]);
+
+    // status choices for user
+</script>

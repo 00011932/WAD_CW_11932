@@ -1,0 +1,39 @@
+﻿
+<div class="container">
+    <div class="row">
+        <div class="col-md-10">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>ISBN</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Authors</th>
+                        <th>PageCount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="o in books">
+                        <td>{{o.id}}</td>
+                        <td>{{o.title}}</td>
+                        <td>{{o.isbn}}</td>
+                        <td>{{o.description}}</td>
+                        <td>{{o.status}}</td>
+                        <td>{{o.authors}}</td>
+                        <td>{{o.pageCount}}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="#!/book/details/{{o.id}}">View</a>
+                            <a class="btn btn-warning btn-sm" href="#!/book/edit/{{o.id}}">Edit</a>
+                            <a class="btn btn-danger btn-sm" href="#!/book/delete/{{o.id}}">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="form-group">
+                <a class="btn btn-success" href="#!/book/create">Create New</a>
+            </div>
+        </div>
+    </div>
+</div>

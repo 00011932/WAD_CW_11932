@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\pages\bookpages\index.html" />
+    <Content Remove="wwwroot\pages\userpages\index.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\pages\bookpages\index.html" />
+    <None Include="wwwroot\pages\loanpages\index.html" />
+    <None Include="wwwroot\pages\userpages\index.html" />
+  </ItemGroup>
+
+</Project>

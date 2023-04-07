@@ -9,39 +9,26 @@ using System.Threading.Tasks;
 
 namespace BookLibrary.Data
 {
-    public class BookLibraryDbContext
+    public class BookLibraryDbContext : DbContext
     {
-      
-            public Response register(User user, SqlConnection connection)
+        public BookLibraryDbContext(DbContextOptions<BookLibraryDbContext> options)
+             : base(options)
         {
-            Response response = new Response();
-            SqlCommand cmd = new SqlCommand("sp_register", connection);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@FirstName", user.FirstName);
-            cmd.Parameters.AddWithValue("@LastName", user.LastName);
-            cmd.Parameters.AddWithValue("@Password", user.Password);
-            cmd.Parameters.AddWithValue("@PassportNumber", user.PassportNumber);
-            cmd.Parameters.AddWithValue("@Email", user.Email);
-            cmd.Parameters.AddWithValue("@Type", "User");
-            cmd.Parameters.AddWithValue("@Status", user.Status=0);
-            connection.Open();
-            int i = cmd.ExecuteNonQuery();
-            connection.Close();
-
-            if(i > 0)
-            {
-                response.StatusCode = 200;
-                response.StatusMessage = "Success! User Created.";
-
-            }
-            else
-            {
-                response.StatusCode = 100;
-                response.StatusMessage = "Fail! Could not Create User.";
-            }
-            return response;
+            // database ensure created methods used to check if the database created or not. if not it creates it auto
+            Database.EnsureCreated();
         }
-            
-        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Loan>()
+        .HasKey(md => new {md.ID});
+
+            modelBuilder.Entity<User>()
+           .HasMany(u => u.BooksCurrentlyOnLoan);           
+        }
+        public DbSet<Book> Books { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Loan> Loans { get; set; }
     }
+
+
 }
